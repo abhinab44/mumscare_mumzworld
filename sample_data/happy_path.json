@@ -1,0 +1,123 @@
+[
+  {
+    "id": "TC-01",
+    "category": "happy_path",
+    "input": "Where is my order? I placed it 3 days ago and haven't received any tracking update.",
+    "expected_output": {
+      "detected_language": "en",
+      "intent": "order_status",
+      "urgency": "medium",
+      "urgency_score_range": [0.30, 0.59],
+      "escalate": false,
+      "escalation_reason": null,
+      "rag_grounded": true,
+      "faithfulness_score_min": 0.75,
+      "schema_valid": true,
+      "reply_en_must_contain": ["tracking", "delivery"],
+      "reply_ar_non_empty": true
+    },
+    "scoring": {
+      "intent_match": 1.0,
+      "schema_pass": 1.0,
+      "escalation_correct": 1.0,
+      "urgency_correct": 1.0
+    },
+    "notes": "Standard order status query, well-covered by delivery policy. Tracking link and timeline expected in response."
+  },
+  {
+    "id": "TC-02",
+    "category": "happy_path",
+    "input": "أريد إرجاع منتج اشتريته قبل أسبوع، المنتج لم يعجبني",
+    "expected_output": {
+      "detected_language": "ar",
+      "intent": "return_refund",
+      "urgency": "low",
+      "urgency_score_range": [0.0, 0.29],
+      "escalate": false,
+      "escalation_reason": null,
+      "rag_grounded": true,
+      "faithfulness_score_min": 0.75,
+      "schema_valid": true,
+      "reply_ar_non_empty": true,
+      "reply_ar_must_contain_dialect": true
+    },
+    "scoring": {
+      "intent_match": 1.0,
+      "schema_pass": 1.0,
+      "escalation_correct": 1.0,
+      "urgency_correct": 1.0
+    },
+    "notes": "Arabic return request. Item purchased 1 week ago = within 15-day window. Reply should confirm eligibility and explain process. Arabic must be Gulf dialect."
+  },
+  {
+    "id": "TC-03",
+    "category": "happy_path",
+    "input": "Is the Philips Avent bottle suitable for newborns? My baby is 2 weeks old.",
+    "expected_output": {
+      "detected_language": "en",
+      "intent": "product_query",
+      "urgency": "low",
+      "urgency_score_range": [0.0, 0.29],
+      "escalate": false,
+      "escalation_reason": null,
+      "schema_valid": true,
+      "reply_en_must_not_contain": ["doctor", "emergency"],
+      "reply_must_not_give_medical_advice": true
+    },
+    "scoring": {
+      "intent_match": 1.0,
+      "schema_pass": 1.0,
+      "escalation_correct": 1.0,
+      "urgency_correct": 1.0
+    },
+    "notes": "Product query, NOT a medical concern. Baby age is context, not a symptom. Should not trigger medical escalation. Response discusses product features and age suitability label."
+  },
+  {
+    "id": "TC-04",
+    "category": "happy_path",
+    "input": "لا أستطيع تسجيل الدخول إلى حسابي، نسيت كلمة المرور",
+    "expected_output": {
+      "detected_language": "ar",
+      "intent": "account_issue",
+      "urgency": "low",
+      "urgency_score_range": [0.0, 0.29],
+      "escalate": false,
+      "escalation_reason": null,
+      "rag_grounded": true,
+      "schema_valid": true,
+      "reply_ar_non_empty": true
+    },
+    "scoring": {
+      "intent_match": 1.0,
+      "schema_pass": 1.0,
+      "escalation_correct": 1.0,
+      "urgency_correct": 1.0
+    },
+    "notes": "Password reset request in Arabic. Well-covered by account policy. Response should include reset steps (Forgot Password → email/phone → OTP)."
+  },
+  {
+    "id": "TC-05",
+    "category": "happy_path",
+    "input": "I returned my stroller 10 days ago. When will I get my refund back to my card?",
+    "expected_output": {
+      "detected_language": "en",
+      "intent": "return_refund",
+      "urgency": "medium",
+      "urgency_score_range": [0.30, 0.59],
+      "escalate": false,
+      "escalation_reason": null,
+      "rag_grounded": true,
+      "faithfulness_score_min": 0.75,
+      "schema_valid": true,
+      "reply_en_must_contain": ["5", "10", "business days"],
+      "reply_must_not_commit_to_specific_date": false
+    },
+    "scoring": {
+      "intent_match": 1.0,
+      "schema_pass": 1.0,
+      "escalation_correct": 1.0,
+      "urgency_correct": 1.0
+    },
+    "notes": "Refund timing — policy states 5-10 business days after receipt inspection. Reply MUST cite this range, not invent a specific date."
+  }
+]

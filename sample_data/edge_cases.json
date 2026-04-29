@@ -1,0 +1,109 @@
+[
+  {
+    "id": "TC-06",
+    "category": "edge_case",
+    "input": "My order طلبي hasn't arrived yet, 5 days ago كان من المفترض يوصل",
+    "expected_output": {
+      "detected_language": "ar",
+      "intent": "order_status",
+      "urgency": "medium",
+      "escalate": false,
+      "schema_valid": true,
+      "reply_ar_non_empty": true,
+      "pipeline_must_not_crash": true
+    },
+    "scoring": {
+      "intent_match": 1.0,
+      "schema_pass": 1.0,
+      "escalation_correct": 1.0,
+      "urgency_correct": 1.0,
+      "arabic_quality_min": 3
+    },
+    "notes": "Code-switching EN+AR. Arabic characters exceed 30% threshold, triggering ar detection. Pipeline must handle both character sets. Arabic reply quality may be 3/5 due to mixed input context."
+  },
+  {
+    "id": "TC-07",
+    "category": "edge_case",
+    "input": "help",
+    "expected_output": {
+      "detected_language": "en",
+      "intent": "general_inquiry",
+      "intent_confidence_max": 0.60,
+      "urgency": "low",
+      "escalate": false,
+      "schema_valid": true,
+      "reply_en_must_contain": ["help", "Mumzworld"],
+      "reply_should_ask_for_more_info": true
+    },
+    "scoring": {
+      "intent_match": 1.0,
+      "schema_pass": 1.0,
+      "escalation_correct": 1.0,
+      "urgency_correct": 1.0
+    },
+    "notes": "Minimum viable input. Single word — classifier must fall to general_inquiry with low confidence. Reply should welcome and ask for more detail. Must not crash."
+  },
+  {
+    "id": "TC-08",
+    "category": "edge_case",
+    "input": "This is the WORST experience ever!!! My baby's crib arrived broken and your customer service is useless. I want a full refund AND compensation NOW.",
+    "expected_output": {
+      "detected_language": "en",
+      "intent": "complaint",
+      "urgency": "high",
+      "urgency_score_range": [0.60, 0.84],
+      "escalate": true,
+      "schema_valid": true,
+      "reply_en_must_be_empathetic": true,
+      "reply_must_not_be_defensive": true,
+      "reply_en_must_contain": ["sorry", "team"]
+    },
+    "scoring": {
+      "intent_match": 1.0,
+      "schema_pass": 1.0,
+      "escalation_correct": 1.0,
+      "urgency_correct": 1.0
+    },
+    "notes": "Emotional, high-urgency complaint. Broken product = safety concern. Escalate=True due to damaged product. Reply must be apologetic and empathetic, not defensive. No false promises of compensation."
+  },
+  {
+    "id": "TC-09",
+    "category": "edge_case",
+    "input": "Do you have any discount codes for Ramadan?",
+    "expected_output": {
+      "detected_language": "en",
+      "intent": "general_inquiry",
+      "urgency": "low",
+      "escalate": false,
+      "rag_grounded": false,
+      "schema_valid": true,
+      "reply_en_must_hedge": true,
+      "reply_must_not_invent_codes": true,
+      "reply_en_must_not_contain": ["RAMADAN2024", "use code", "% off"]
+    },
+    "scoring": {
+      "intent_match": 0.75,
+      "schema_pass": 1.0,
+      "escalation_correct": 1.0,
+      "urgency_correct": 1.0,
+      "faithfulness_score_min": 0.80
+    },
+    "notes": "Promotions not in policy corpus. rag_grounded=False. Critical: LLM must NOT hallucinate a discount code. Reply must include uncertainty language: 'I don't have current promotion details' and direct to app/website."
+  },
+  {
+    "id": "TC-10",
+    "category": "edge_case",
+    "input": "I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order I need help with my order",
+    "expected_output": {
+      "normalized_text_max_length": 2000,
+      "schema_valid": true,
+      "pipeline_must_not_crash": true,
+      "processing_time_ms_max": 15000
+    },
+    "scoring": {
+      "schema_pass": 1.0,
+      "no_crash": 1.0
+    },
+    "notes": "Input is ~2000+ characters (same phrase repeated). Node 1 must truncate at 2000 chars. No API error, no crash. This tests the truncation guard."
+  }
+]
